@@ -1,0 +1,25 @@
+#example blueprint file
+#input setting
+popid: Southfinal # id of the population (no white space)
+nseq: 80 # number of sequences
+L: 1146395213 # total number of observed nucleic sites, including polymorphic and monomorphic
+whether_folded: true # whethr the SFS is folded (true or false)
+SFS: 300676 644480 430802 332819 269782 229151 192701 166350 147635 131352 117241 107534 98928 92641 87944 84132 81058 77999 75696 73537 72356 68758 66557 64006 62832 61236 61208 60229 59597 58607 58081 58383 57664 57555 56846 56122 56821 56014 56619 29253 # snp frequency spectrum: number of singleton, number of doubleton, etc. (separated by white space)
+#smallest_size_of_SFS_bin_used_for_estimation: 1 # default is 1; to ignore singletons, uncomment this line and change this number to 2
+#largest_size_of_SFS_bin_used_for_estimation: 40 # default is nseq/2 for folded SFS
+pct_training: 0.67 # percentage of sites for training
+nrand: 19 39 58 78 # number of random break points for each try (separated by white space)
+project_dir: Southfinal # project directory
+stairway_plot_dir: stairway_plot_es212 # directory to the stairway plot files
+ninput: 200 # number of input files to be created for each estimation
+#random_seed: 6
+#output setting
+mu: 1.558e-9 # assumed mutation rate per site per generation
+year_per_generation: 2 # assumed generation time (in years)
+#plot setting
+plot_title: South # title of the plot
+xrange: 0.1,100 # Time (1k year) range; format: xmin,xmax; "0,0" for default
+yrange: 0,1000 # Ne (1k individual) range; format: xmin,xmax; "0,0" for default
+xspacing: 2 # X axis spacing
+yspacing: 2 # Y axis spacing
+fontsize: 12 # Font size
