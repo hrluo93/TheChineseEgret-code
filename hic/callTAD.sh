@@ -3,7 +3,7 @@ cp aligned/inter_30.hic eeu.final2.fasta.hic
 h1d basic dump /media/perimeter/r2/eeu/hic/eeu.final2.fasta.hic 50000 chr2 --datatype rawhic -o eeu.VC --gt /media/perimeter/r2/eeu/hic/eeu.final2.g --normalize VC --juicertool /media/perimeter/r2/eeu/hic/juicer_tools.2.20.00.jar
 h1d call stripeTAD /media/perimeter/r2/eeu/hic/eeu.VC/50000/observed.VC.chr2.matrix.gz 50000 chr2 -o eeu50k.chr2.TAD --gt /media/perimeter/r2/eeu/hic/eeu.final2.g
 
-#manually covert to perform the robust test in HiCExplorer
+#manually covert step, to perform the robust test in HiCExplorer
 python /media/perimeter/r2/eeu/hic/hic2mcool.py
 hicConvertFormat --chromosomeSizes /media/perimeter/r2/eeu/hic/eeu.final2.g --matrices /media/perimeter/r2/eeu/hic/eeu.final2.50kb.txt --inputFormat 2D-text --outputFormat h5 --outFileName eeu.final2.50k.h5 --resolutions 50000
 hicCorrectMatrix diagnostic_plot --matrix /media/perimeter/r2/eeu/hic/eeu.final2.50k.h5 -o h5_diag.png
