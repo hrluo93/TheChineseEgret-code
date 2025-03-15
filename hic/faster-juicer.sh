@@ -1,3 +1,4 @@
+#Only for quick manual visualization and correction in Juicerbox
 #Order contig
 python /path/quarTeT-1.2.5/quartet_assemblymapper.py -r eeu.final2.fasta -q ul5.asm.hic.hap2.p_ctg.fa --keep --nofilter -p hap2.quar -t 32
 ragtag.py splitasm hap2.quar.draftgenome.fasta > hap2.contig.fasta
