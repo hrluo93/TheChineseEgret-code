@@ -3,7 +3,7 @@ import hicstraw
 import os
 import pandas as pd
 
-##It seems that the current hic2cool version can not deal with the new juicer output h5 format; this is a temporary covert method.  
+##Code sourced from https://github.com/deeptools/HiCExplorer/issues/821#issuecomment-1316842070
 hic_file = 'eeu.final2.fasta.hic'
 cool_file = 'eeu.final2.50kb.cool'
 
