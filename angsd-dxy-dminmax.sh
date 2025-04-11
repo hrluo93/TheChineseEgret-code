@@ -28,7 +28,9 @@ grep -w ${i} ${genome}.fai | cut -f1,2 > ${spe1}.${i}.g
 bedtools complement -i ${spe1}${i}.thetapi.bed -g ${spe1}.${i}.g | awk '{print $1"\t"$2"\t"$3"\t"0}' > ${spe1}.${i}.invar.bed
 cat ${spe1}.${i}.invar.bed ${spe1}${i}.thetapi.bed | bedtools sort -i - -g ${spe1}.${i}.g > ${spe1}${i}.allpi.bed
 bedtools makewindows -g ${spe1}.${i}.g -w 50000 > ${i}.50k.bed
-bedtools map -a ${i}.50k.bed -b ${spe1}${i}.allpi.bed -c 4 -o mean > res/${spe1}${i}.50kpi.bed
+bedtools map -a ${i}.50k.bed -b ${spe1}${i}.allpi.bed -c 4 -o mean > res/${spe1}.${i}.50kpi.bed
+grep -w ${i} /media/luoub/r2/eeu/geneflow2/varfst2/eeu.rho1.bed > ${i}.rho.bed
+bedtools map -a ${i}.rho.bed -b ${spe1}${i}.allpi.bed -c 4 -o mean > res/${i}.${spe1}pi.rho.bed
 
 realSFS ${i}-${spe2}pi.saf.idx > ${i}-${spe2}pi.sfs
 realSFS saf2theta ${i}-${spe2}pi.saf.idx -outname ${spe2}${i} -sfs ${i}-${spe2}pi.sfs
@@ -37,7 +39,8 @@ awk '{print $1"\t"$2"\t"$2"\t"10^$4}' ${spe2}${i}.thetas.table > ${spe2}${i}.the
 grep -w ${i} ${genome}.fai | cut -f1,2 > ${spe2}.${i}.g
 bedtools complement -i ${spe2}${i}.thetapi.bed -g ${spe2}.${i}.g | awk '{print $1"\t"$2"\t"$3"\t"0}' > ${spe2}.${i}.invar.bed
 cat ${spe2}.${i}.invar.bed ${spe2}${i}.thetapi.bed | bedtools sort -i - -g ${spe2}.${i}.g > ${spe2}${i}.allpi.bed
-bedtools map -a ${i}.50k.bed -b ${spe2}${i}.allpi.bed -c 4 -o mean > res/${spe2}in${spe1}${i}.50kpi.bed
+bedtools map -a ${i}.50k.bed -b ${spe2}${i}.allpi.bed -c 4 -o mean > res/${spe2}.${i}.50kpi.bed
+bedtools map -a ${i}.rho.bed -b ${spe2}${i}.allpi.bed -c 4 -o mean > raw2/${i}.${spe2}pi.bed
 
 
 gzip -d ${i}-pop${spe1}.mafs.gz -c > ${i}-pop${spe1}.mafs
@@ -50,7 +53,7 @@ bedtools map -a ${i}.50k.bed -b ${i}-Dxy_persite.bed -c 4 -o min,max > res/${i}.
 bedtools complement -i ${i}-Dxy_persite.bed -g ${spe1}.${i}.g | awk '{print $1"\t"$2"\t"$3"\t"0}' > ${i}.dxyinvar.bed
 cat ${i}.dxyinvar.bed ${i}-Dxy_persite.bed | bedtools sort -g ${spe1}.${i}.g -i - > ${i}.angsddxy-all.bed
 bedtools map -a ${i}.50k.bed -b ${i}.angsddxy-all.bed -c 4 -o mean > res/${i}.50kdxy.bed
-grep -w ${i} /media/luoub/r2/eeu/geneflow2/varfst2/eeu.rho1.bed > ${i}.rho.bed
+#grep -w ${i} /media/luoub/r2/eeu/geneflow2/varfst2/eeu.rho1.bed > ${i}.rho.bed
 bedtools map -a ${i}.rho.bed -b ${i}.angsddxy-all.bed -c 4 -o mean > res/${i}.rhodxy.bed
 bedtools map -a ${i}.rho.bed -b ${i}-Dxy_persite.bed -c 4 -o min,max > res/${i}.rhodminmax.bed
 done
