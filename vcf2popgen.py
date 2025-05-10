@@ -5,7 +5,7 @@
 示例脚本: 从VCF读取并输出 BayeScan 和 Genepop 格式。
 
 使用方法:
-  python vcf2genepop.py -i /path/to/input.vcf \
+  python vcf2popgen.py -i /path/to/input.vcf \
                                -o prefix \
                                -pop /path/to/pop.csv
 
