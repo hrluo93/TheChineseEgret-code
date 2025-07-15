@@ -40,7 +40,7 @@ grep -w ${i} ${genome}.fai | cut -f1,2 > ${spe2}.${i}.g
 bedtools complement -i ${spe2}${i}.thetapi.bed -g ${spe2}.${i}.g | awk '{print $1"\t"$2"\t"$3"\t"0}' > ${spe2}.${i}.invar.bed
 cat ${spe2}.${i}.invar.bed ${spe2}${i}.thetapi.bed | bedtools sort -i - -g ${spe2}.${i}.g > ${spe2}${i}.allpi.bed
 bedtools map -a ${i}.50k.bed -b ${spe2}${i}.allpi.bed -c 4 -o sum | awk '{print $1"\t"$2"\t"$3"\t"$4/50000}' > res/${spe2}.${i}.50kpi.bed
-bedtools map -a ${i}.rho.bed -b ${spe2}${i}.allpi.bed -c 4 -o sum | awk '{print $1"\t"$2"\t"$3"\t"$4/($3-$2+1)}' > raw2/${i}.${spe2}pi.bed
+bedtools map -a ${i}.rho.bed -b ${spe2}${i}.allpi.bed -c 4 -o sum | awk '{print $1"\t"$2"\t"$3"\t"$4/($3-$2+1)}' > res/${i}.${spe2}pi.rho.bed
 
 
 gzip -d ${i}-pop${spe1}.mafs.gz -c > ${i}-pop${spe1}.mafs
