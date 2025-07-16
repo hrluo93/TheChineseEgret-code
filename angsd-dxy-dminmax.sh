@@ -55,5 +55,5 @@ cat ${i}.dxyinvar.bed ${i}-Dxy_persite.bed | bedtools sort -g ${spe1}.${i}.g -i 
 bedtools map -a ${i}.50k.bed -b ${i}.angsddxy-all.bed -c 4 -o sum | awk '{print $1"\t"$2"\t"$3"\t"$4/50000}' > res/${i}.50kdxy.bed
 #grep -w ${i} /media/luoub/r2/eeu/geneflow2/varfst2/eeu.rho1.bed > ${i}.rho.bed
 bedtools map -a ${i}.rho.bed -b ${i}.angsddxy-all.bed -c 4 -o sum | awk '{print $1"\t"$2"\t"$3"\t"$4/($3-$2+1)}' > res/${i}.rhodxy.bed
-bedtools map -a ${i}.rho.bed -b ${i}-Dxy_persite.bed -c 4 -o min,max > res/${i}.rhodminmax.bed
+bedtools map -a ${i}.rho.bed -b ${i}-Dxy_persite.bed -c 4 -o min,max | awk '{print $1"\t"$2"\t"$3"\t"$4/($3-$2+1)"\t"$5/($3-$2+1)}' > res/${i}.rhodminmax.bed
 done
