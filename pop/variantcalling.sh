@@ -6,7 +6,8 @@ bwa mem -R "@RG\tID:$spname\tLB:$spname\tPL:ILLUMINA\tSM:$spname" -t 32 eeuf2 ${
 echo ${loc}_R1.fastq.gz ${spname} >>suc.samples
 done
 #samtools faidx eeu.final2.fasta
-#java -jar /media/perimeter/r2/srcs/picard.jar CreateSequenceDictionary R=eeu.final2.fasta O=eeu.final2.dictls /media/perimeter/r2/eeu/bam/C*.sort.bam | cut -d "/" -f 7 | cut -d "." -f 1| while read spname;do 
+#java -jar /media/perimeter/r2/srcs/picard.jar CreateSequenceDictionary R=eeu.final2.fasta O=eeu.final2.dict
+ls /media/perimeter/r2/eeu/bam/C*.sort.bam | cut -d "/" -f 7 | cut -d "." -f 1| while read spname;do 
 cd /media/perimeter/r2/eeu/bam
 samtools index /media/perimeter/r2/eeu/bam/${spname}.sort.bam
 java -jar /media/perimeter/r2/srcs/picard.jar MarkDuplicates REMOVE_DUPLICATES=false MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=8000 INPUT=/media/perimeter/r2/eeu/bam/${spname}.sort.bam OUTPUT=/media/perimeter/r2/eeu/bam/${spname}.sortmk.bam METRICS_FILE=/media/perimeter/r2/eeu/bam/${spname}.sortmk.g.bam.metric
