@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 """
-compute_g1_g2_g3_params.py
+compute_g1_g2_g3_params.py  (1-based CLOSED intervals)
 
 Estimate length distributions for exon (g1), intron (g2), and (optionally) intergenic (g3).
 Optionally stratify by a categorical column (e.g., --type type).
+
+**Important**
+- Always recompute length from columns #2/#3 (start/end) as 1-based CLOSED intervals:
+    length = end - start + 1
+- Ignore any existing "length/len/size/bp" column (and --length-col is ignored).
 
 Outputs:
   - For g1/g2 (log-normal):  --g1-mean <raw_mean> --g1-sigma <log_sigma>
@@ -17,11 +22,10 @@ Usage:
          [--length-col LENGTH] [--trim 0.0] [--mle] [--type TYPECOL]
 
 Notes
-- If no `length` column exists, the script assumes cols 2/3 are start/end (0-based indexing for pandas),
-  and computes length = end - start.
-- By default uses sample std (ddof=1). Pass --mle to use MLE std (ddof=0).
+- Separator: if filename ends with .tsv/.bed => tab; else let pandas infer.
+- We keep sample std by default (ddof=1). Use --mle for MLE std (ddof=0).
 - `--trim p` trims the top p fraction (e.g., 0.005) before computing raw mean for g1/g2.
-- With --type TYPECOL, if TYPECOL exists in a table, stats are reported per category; otherwise falls back to overall.
+- With --type TYPECOL, if TYPECOL exists in a table, stats are reported per category; otherwise fall back to overall.
 """
 
 import argparse
@@ -31,29 +35,30 @@ import pandas as pd
 # ---------- I/O & preprocessing ----------
 
 def read_table(path, length_col=None):
-    """Read a table and return a DataFrame with a computed '_length' column."""
+    """Read a table and return a DataFrame with a computed '_length' column.
+    Always recompute length from 1-based CLOSED intervals using columns #2/#3.
+    Any existing length column (and --length-col) is ignored by design.
+    """
     sep = None
-    if str(path).endswith((".tsv", ".bed")):
+    if str(path).lower().endswith((".tsv", ".bed")):
         sep = "\t"
     df = pd.read_csv(path, sep=sep, engine="python")
     cols = list(df.columns)
+    if len(cols) < 3:
+        raise ValueError(f"{path}: need at least 3 columns (chrom, start, end).")
 
-    if length_col and length_col in df.columns:
-        lengths = df[length_col].astype(float)
-    else:
-        cand = [c for c in cols if c.lower() in ("length", "len", "size", "bp")]
-        if cand:
-            lengths = df[cand[0]].astype(float)
-        else:
-            if len(cols) < 3:
-                raise ValueError(f"{path}: cannot find length column and fewer than 3 columns to derive from.")
-            lengths = (df.iloc[:, 2] - df.iloc[:, 1]).astype(float)
+    # Force 1-based CLOSED interval length
+    start = pd.to_numeric(df.iloc[:, 1], errors="coerce")
+    end   = pd.to_numeric(df.iloc[:, 2], errors="coerce")
+    lengths = (end - start + 1).astype(float)
 
+    # clean and keep positives
     lengths = lengths.replace([np.inf, -np.inf], np.nan).dropna()
     lengths = lengths[lengths > 0]
-    df = df.loc[lengths.index].copy()
-    df["_length"] = lengths.astype(float)
-    return df
+
+    out = df.loc[lengths.index].copy()
+    out["_length"] = lengths.astype(float)
+    return out
 
 # ---------- statistics & reporting ----------
 
@@ -159,12 +164,12 @@ def g3_trimmed_suggestions(lengths, ddof=1, prefix=None):
 
 def main():
     ap = argparse.ArgumentParser(
-        description="Estimate log-normal parameters for g1/g2 and Uniform/Log-normal options for g3; optionally stratify by a categorical column."
+        description="Estimate log-normal parameters for g1/g2 and Uniform/Log-normal options for g3; ALWAYS recompute 1-based CLOSED lengths."
     )
     ap.add_argument("--exon",   required=True, help="Exon (g1) file: CSV/TSV/BED-like.")
     ap.add_argument("--intron", required=True, help="Intron (g2) file: CSV/TSV/BED-like.")
     ap.add_argument("--inter",  help="Intergenic (g3) file: CSV/TSV/BED-like. Optional.")
-    ap.add_argument("--length-col", help="Name of length column (if present).")
+    ap.add_argument("--length-col", help="(Ignored) legacy option; length is ALWAYS recomputed 1-based.")
     ap.add_argument("--trim", type=float, default=0.0,
                     help="Trim top fraction before raw mean for g1/g2 (e.g., 0.005).")
     ap.add_argument("--mle", action="store_true",
