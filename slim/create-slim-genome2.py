@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-learn_slim.py
-
 学习模式（-learn）：
   从已有 SLiM initializeGenomicElement(...) 文件中，在指定学习区间内拟合
   g1/g2/g3 的长度与 (g2,g1) 对的数量（基因块大小）与位置的关系（简单 MLP 回归），
