@@ -14,9 +14,14 @@ angsd -nThreads 8 -anc $genome -ref $genome  -r $i -bam allbam.list -skipTrialle
 
 realSFS print $i-all.saf.idx | cut -f 1-2 > $i-sites.txt
 angsd sites index $i-sites.txt
-angsd -nThreads 8 -anc $genome  -ref $genome -r $i -bam ${spe1}bam.list -skipTriallelic 1 -setMinDepth 5 -setMaxDepth 1000 -GL 1 -out $i-pop${spe1} -doMaf 1 -doMajorMinor 1 -minMapQ 20 -minQ 20 -doSaf 1 -doCounts 1 -sites $i-sites.txt
 
-angsd -nThreads 8 -anc $genome  -ref $genome -r $i -bam ${spe2}bam.list -skipTriallelic 1 -setMinDepth 5 -setMaxDepth 1000 -GL 1 -out $i-pop${spe2} -doMaf 1 -doMajorMinor 1 -minMapQ 20 -minQ 20 -doSaf 1 -doCounts 1 -sites $i-sites.txt
+# recommend use -doMajorMinor 4 Use reference allele as major when calculating dxy
+
+angsd -nThreads 8 -anc $genome  -ref $genome -r $i -bam ${spe1}bam.list -skipTriallelic 1 -setMinDepth 5 -setMaxDepth 1000 -GL 1 -out $i-pop${spe1} -doMaf 1 -doMajorMinor 4 -minMapQ 20 -minQ 20 -doSaf 1 -doCounts 1 -sites $i-sites.txt
+angsd -nThreads 8 -anc $genome  -ref $genome -r $i -bam ${spe2}bam.list -skipTriallelic 1 -setMinDepth 5 -setMaxDepth 1000 -GL 1 -out $i-pop${spe2} -doMaf 1 -doMajorMinor 4 -minMapQ 20 -minQ 20 -doSaf 1 -doCounts 1 -sites $i-sites.txt
+
+# calculating pi recommend use -doMajorMinor 1
+
 angsd -nThreads 8 -anc $genome  -ref $genome -r $i -bam ${spe1}bam.list -skipTriallelic 1 -setMinDepth 5 -setMaxDepth 1000 -GL 1 -out $i-${spe1}pi -doMaf 1 -SNP_pval 1e-6 -doMajorMinor 1 -minMapQ 20 -minQ 20 -doSaf 1 -doCounts 1
 angsd -nThreads 8 -anc $genome  -ref $genome -r $i -bam ${spe2}bam.list -skipTriallelic 1 -setMinDepth 5 -setMaxDepth 1000 -GL 1 -out $i-${spe2}pi -doMaf 1 -SNP_pval 1e-6 -doMajorMinor 1 -minMapQ 20 -minQ 20 -doSaf 1 -doCounts 1
 
