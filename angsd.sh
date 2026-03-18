@@ -28,7 +28,7 @@ angsd -nThreads 8 -anc $genome  -ref $genome -r $i -bam ${spe2}bam.list -skipTri
 realSFS ${i}-${spe1}pi.saf.idx > ${i}-${spe1}pi.sfs
 realSFS saf2theta ${i}-${spe1}pi.saf.idx -outname ${spe1}${i} -sfs ${i}-${spe1}pi.sfs
 thetaStat print ${spe1}${i}.thetas.idx > ${spe1}${i}.thetas.table
-awk '{print $1"\t"$2"\t"$2"\t"10^$4}' ${spe1}${i}.thetas.table > ${spe1}${i}.thetapi.bed
+awk '{print $1"\t"$2"\t"$2"\t"exp($4)}' ${spe1}${i}.thetas.table > ${spe1}${i}.thetapi.bed
 grep -w ${i} ${genome}.fai | cut -f1,2 > ${spe1}.${i}.g
 bedtools complement -i ${spe1}${i}.thetapi.bed -g ${spe1}.${i}.g | awk '{print $1"\t"$2"\t"$3"\t"0}' > ${spe1}.${i}.invar.bed
 cat ${spe1}.${i}.invar.bed ${spe1}${i}.thetapi.bed | bedtools sort -i - -g ${spe1}.${i}.g > ${spe1}${i}.allpi.bed
@@ -40,7 +40,7 @@ bedtools map -a ${i}.rho.bed -b ${spe1}${i}.allpi.bed -c 4 -o sum | awk '{print 
 realSFS ${i}-${spe2}pi.saf.idx > ${i}-${spe2}pi.sfs
 realSFS saf2theta ${i}-${spe2}pi.saf.idx -outname ${spe2}${i} -sfs ${i}-${spe2}pi.sfs
 thetaStat print ${spe2}${i}.thetas.idx > ${spe2}${i}.thetas.table
-awk '{print $1"\t"$2"\t"$2"\t"10^$4}' ${spe2}${i}.thetas.table > ${spe2}${i}.thetapi.bed
+awk '{print $1"\t"$2"\t"$2"\t"exp($4)}' ${spe2}${i}.thetas.table > ${spe2}${i}.thetapi.bed
 grep -w ${i} ${genome}.fai | cut -f1,2 > ${spe2}.${i}.g
 bedtools complement -i ${spe2}${i}.thetapi.bed -g ${spe2}.${i}.g | awk '{print $1"\t"$2"\t"$3"\t"0}' > ${spe2}.${i}.invar.bed
 cat ${spe2}.${i}.invar.bed ${spe2}${i}.thetapi.bed | bedtools sort -i - -g ${spe2}.${i}.g > ${spe2}${i}.allpi.bed
