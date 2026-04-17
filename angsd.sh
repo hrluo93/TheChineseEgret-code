@@ -61,4 +61,11 @@ bedtools map -a ${i}.50k.bed -b ${i}.angsddxy-all.bed -c 4 -o sum | awk '{print 
 #grep -w ${i} /media/luoub/r2/eeu/geneflow2/varfst2/eeu.rho1.bed > ${i}.rho.bed
 bedtools map -a ${i}.rho.bed -b ${i}.angsddxy-all.bed -c 4 -o sum | awk '{print $1"\t"$2"\t"$3"\t"$4/($3-$2+1)}' > res/${i}.rhodxy.bed
 bedtools map -a ${i}.rho.bed -b ${i}-Dxy_persite.bed -c 4 -o min,max | awk '{print $1"\t"$2"\t"$3"\t"$4/($3-$2+1)"\t"$5/($3-$2+1)}' > res/${i}.rhodminmax.bed
+
+awk '{print $1"\t"$2"\t"$2"\t"exp($3)}' ${spe1}${i}.thetas.table > fixpi/${spe1}${i}.thetaw.bed
+awk '{print $1"\t"$2"\t"$2"\t"exp($3)}' ${spe2}${i}.thetas.table > fixpi/${spe2}${i}.thetaw.bed
+bedtools map -a ${i}.rho.bed -b fixpi/${spe1}${i}.thetaw.bed -c 4 -o sum | awk '{print $1"\t"$2"\t"$3"\t"$4/($3-$2+1)}' > fixpi/${i}.${spe1}w.rho.bed
+bedtools map -a ${i}.rho.bed -b fixpi/${spe2}${i}.thetaw.bed -c 4 -o sum | awk '{print $1"\t"$2"\t"$3"\t"$4/($3-$2+1)}' > fixpi/${i}.${spe2}w.rho.bed
+grep -v "Pos" fixpi/${i}.${spe1}w.rho.bed | bedtools sort -g /media/luoub/data/r2/r2/eeu/eeu.final2.fasta.g -i - >> fixpi/${spe1}.all.w.bed
+grep -v "Pos" fixpi/${i}.${spe2}w.rho.bed | bedtools sort -g /media/luoub/data/r2/r2/eeu/eeu.final2.fasta.g -i - >> fixpi/${spe2}.all.w.bed
 done
