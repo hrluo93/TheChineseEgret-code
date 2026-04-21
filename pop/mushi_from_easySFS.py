@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-easySFS 1D 输出 (.sfs / .obs) -> mushi 折叠 SFS 推断 η(t)，并导出 AI 可编辑矢量图 (SVG/PDF)。
+easySFS 1D (.sfs / .obs) -> mushi folded-SFS to η(t)
 输出：
   <out>.ksfs.tsv        # folded SFS (freq\tcount)
-  <out>.eta.tsv         # 分段 η(t)=2N(t)
-  <out>.eta.svg/.pdf    # 矢量图（AI 可编辑）
-  <out>.overlay.svg/pdf # （当使用 --grid 时）多组正则结果叠加图
+  <out>.eta.tsv         #  η(t)=2N(t)
+  <out>.eta.svg/.pdf    # Output
+  <out>.overlay.svg/pdf # （--grid）多组正则结果叠加图
 """
 
 import argparse, os, re
