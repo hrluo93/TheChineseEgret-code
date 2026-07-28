@@ -11,6 +11,6 @@ plink --allow-extra-chr --chr-set 30 --threads 20 -vcf /media/perimeter/r2/eeu/v
 #heterozygosity
 for i in {3..61};do
 spname=`sed -n '1p' autosome.gt.tab | cut -f $i`
-num=`cat autosome.gt.tab | cut -f $i | awk '{if ($1=="0/1"||$1=="0|1") print}' | wc -l`
+num=`cat autosome.gt.tab | cut -f $i | awk '{if ($1=="0/1"||$1=="0|1"||$1=="1|0") print}' | wc -l`
 echo $spname "\t" $num >> smaple.autosomegt1.tab
 done
